@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"    
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/mainLayout"
+    >
+    
+   <LinearLayout
+     	android:layout_width="fill_parent"
+     	android:layout_height="fill_parent"
+     	android:layout_weight="1.5"
+     	android:gravity="center_vertical">
+     	     	
+     	 <TextView
+     	  android:id="@+id/speed"
+          android:text="1"
+          
+          android:textSize="50sp"
+          android:typeface="monospace"
+          android:gravity="right|center_vertical"          
+          android:background="#000000"
+          android:textColor="#FF0000"
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent"
+          android:layout_weight="1"/>
+          
+          <TextView
+          android:text=" km/h"
+          android:textStyle="bold"
+          android:textSize="20sp"
+          android:typeface="monospace"
+          android:gravity="left|center_vertical"          
+          android:background="#000000"
+          android:textColor="#CCFFCC"
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent"
+          android:layout_weight=".5"/>
+     	
+     	
+     	</LinearLayout>
+    	<LinearLayout
+     		android:layout_width="fill_parent"
+     		android:layout_height="fill_parent"
+     		android:layout_weight="1">   
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:layout_width="fill_parent"
+    		android:layout_height="fill_parent"
+    		android:stretchColumns="1">
+						
+			<View
+        		android:layout_height="3dip"
+        		android:background="#FF0000" 
+        		
+        		/>
+        		
+			<View
+        		android:layout_height="15dip"	
+        		/>        		
+			
+    		<TableRow>   
+    			
+    		
+    		 	   		
+        		<TextView
+		    		android:layout_column="1"
+            		android:text="Average Speed"
+            		android:textColor="#CCFFCC"
+            		android:padding="3dip" 
+            		android:textSize="20sp"/>
+        		<TextView
+        		   android:id="@+id/averageSpeed"
+            		android:text="0 km/h "
+            		android:gravity="right"
+            		android:padding="3dip" 
+            		android:textColor="#FF0000"
+            		 android:textSize="20sp"/>
+            		
+    		</TableRow>
+
+    		<TableRow>
+        		<TextView
+            		android:layout_column="1"
+            		android:text="Total time"
+            		android:padding="3dip" 
+            		android:textColor="#CCFFCC"
+            		 android:textSize="20sp"/>
+        		<TextView
+        			android:id="@+id/totalTime"
+            		android:text="0 s"
+            		android:gravity="right"
+            		android:padding="3dip" 
+            		android:textColor="#FF0000"
+            		android:textSize="20sp"/>
+    		</TableRow>
+
+    		<TableRow>
+        		<TextView
+            		android:layout_column="1"
+            		android:text="Total Distance"
+            		android:padding="3dip" 
+            		android:textColor="#CCFFCC"
+            		android:textSize="20sp"/>
+        		<TextView
+        		 	android:id="@+id/totalDistance" 
+            		android:text="0 km's"
+            		android:gravity="right"
+            		android:padding="3dip" 
+            		android:textColor="#FF0000"
+            		android:textSize="20sp"/>
+    		</TableRow>
+    			<TableRow>
+        		<TextView
+            		android:layout_column="1"
+            		android:text="Current speed"
+            		android:padding="3dip" 
+            		android:textColor="#CCFFCC"
+            		android:textSize="20sp"/>
+        		<TextView
+        		 	android:id="@+id/currentSpeed" 
+            		android:text="0 m/s"
+            		android:gravity="right"
+            		android:padding="3dip" 
+            		android:textColor="#FF0000"
+            		android:textSize="20sp"/>
+    		</TableRow>    		
+    		<TableRow>
+        		<TextView
+            		android:layout_column="1"
+            		android:text="Total satellites"
+            		android:padding="3dip" 
+            		android:textColor="#CCFFCC"
+            		android:textSize="20sp"/>
+        		<TextView
+        		 	android:id="@+id/totalSatellites" 
+            		android:text="0 m/s"
+            		android:gravity="right"
+            		android:padding="3dip" 
+            		android:textColor="#FF0000"
+            		android:textSize="20sp"/>
+    		</TableRow>    		
+    		
+		</TableLayout>			     		
+			 
+			 			               	     
+     	</LinearLayout>
+    
+</LinearLayout>
