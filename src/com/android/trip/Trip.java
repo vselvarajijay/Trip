@@ -1,13 +1,13 @@
 package com.android.trip;
 
-import java.util.ArrayList;
-
-
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,8 +44,34 @@ public class Trip extends Activity implements GpsEventListener, OnTouchListener 
 	
 	private Boolean paused;
 	
-	private ProgressDialog satelliteProgress;
 	
+	
+	
+	private Handler mHandler = new Handler();
+	private Runnable mUpdateTimeTask = new Runnable() {
+		   public void run() {
+		       final long start = lastStartTime;
+		       long millis = SystemClock.uptimeMillis() - start;
+		       int seconds = (int) (millis / 1000);
+		       int minutes = (int) seconds / 60;
+		       int hours = (int) minutes / 60;
+		       
+		       
+		       seconds     = seconds % 60;
+		       minutes = minutes % 60;
+
+		       if (seconds < 10) {
+		           totalTime.setText(hours + ":" + minutes + ":0" + seconds);
+		       } else {
+		           totalTime.setText(hours + ":" + minutes + ":" + seconds);            
+		       }
+		     
+		       mHandler.postAtTime(this,
+		    		   SystemClock.uptimeMillis() + 1000);
+		       
+		       
+		   }
+		};
 	
 	
     /** Called when the activity is first created. */
@@ -69,25 +95,23 @@ public class Trip extends Activity implements GpsEventListener, OnTouchListener 
         gpsProvider = new GPSProvider((LocationManager)getSystemService(Context.LOCATION_SERVICE));              
         gpsProvider.setEventListener(this);
         
-        
-        
-        distance = 0;
-        time = 0;
-        satellitesUsed =0;
-        lastStartTime = 0;
+                
+        distance = 0;        
+        satellitesUsed =0;        
         
         setMetric(metric.km);        
         setTotalDistance(0);
         setCurrentSpeed(0,1);
         setAverageSpeed(0);
-        setTotalTime(-1);
+        setTotalTime(0);
         
         paused = true;
         
                        
         View topLayout = this.findViewById(R.id.mainLayout);
-        topLayout.setOnTouchListener(this);      
+        topLayout.setOnTouchListener(this);    
         
+         
         
     }
     
@@ -105,39 +129,26 @@ public class Trip extends Activity implements GpsEventListener, OnTouchListener 
         switch (item.getItemId()) {
         case R.id.reset:     
         	resetTrip();
-            return true;                    
+            return true;   
+        case R.id.logs:        	        
+            Intent myIntent = new Intent(this, Logs.class);
+            startActivityForResult(myIntent, 0);           
+        	return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
 
-    
-    
-    
 
 	@Override
 	public void distanceChanged(float distanceChange) {
-		
-		if(!isPaused())
-		{
+		if(isPaused()) return;		
+		distance += distanceChange;				
+		setTotalDistance(distance);
 			
-			
-			distance += distanceChange;
-					
-			setTotalDistance(distance);
-			
-			long currentTime = System.currentTimeMillis();
-			
-			if(lastStartTime==0) lastStartTime=System.currentTimeMillis();
-			
-			time += (currentTime-lastStartTime);			
-			setTotalTime(time/1000f);
-			
-			
-			lastStartTime = currentTime;			
-		}
 	}
-		
+
+	
 	private void setMetric(metric newMetric)
 	{
 		currentMetric = newMetric;
@@ -192,41 +203,36 @@ public class Trip extends Activity implements GpsEventListener, OnTouchListener 
 	public void satelliteFix(int count) {
 		
 		satellitesUsed = count;
-		totalSatellites.setText(((Integer)satellitesUsed).toString());	
-		
-		if(satellitesUsed>=8 && satelliteProgress != null)
-			satelliteProgress.dismiss();
+		totalSatellites.setText(((Integer)satellitesUsed).toString());		
 	}
 	
 	private Boolean isPaused()
 	{
-		if(satellitesUsed<8) return true;		
 		return paused;
 	}
 	
 	
 	private void startTrip()
-	{			
+	{	
 		paused = false;
-		lastStartTime = 0;
-		
-		if(satellitesUsed<8)
-			satelliteProgress = ProgressDialog.show(this,"","Searching for satelites...",true);
-		
 		notifyUser("starting");
+		
+		lastStartTime = SystemClock.uptimeMillis();
+				
+        mHandler.removeCallbacks(mUpdateTimeTask);
+        mHandler.postDelayed(mUpdateTimeTask, 100);
+        	
 	}
 	private void pauseTrip()
 	{
 		paused = true;		
+		
+		mHandler.removeCallbacks(mUpdateTimeTask);
+		
 		notifyUser("paused");
 	}
 	
-	private void resumeTrip()
-	{
-		paused = false;
-		lastStartTime = System.currentTimeMillis();
-		notifyUser("resumed");
-	}
+	 
 	private void resetTrip()
 	{
 		 distance = 0;

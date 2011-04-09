@@ -65,7 +65,7 @@ public class GPSProvider implements LocationListener, GpsStatus.Listener {
 		switch(event)
 		{
 				case GpsStatus.GPS_EVENT_FIRST_FIX:
-					((GpsEventListener)listener).satelliteFix(1);
+					((GpsEventListener)listener).satelliteFix(-1);
 				break;		
 				case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
 					GpsStatus status = locationManager.getGpsStatus(null);
